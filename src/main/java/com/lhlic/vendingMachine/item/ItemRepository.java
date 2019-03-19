@@ -1,4 +1,4 @@
-package com.lhlic.vendingMachine;
+package com.lhlic.vendingMachine.item;
 
 import org.springframework.data.repository.CrudRepository;
 
