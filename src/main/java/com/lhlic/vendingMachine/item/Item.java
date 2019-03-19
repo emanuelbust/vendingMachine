@@ -27,12 +27,19 @@ public class Item {
 	// Default constructor
 	public Item() {}
 	
+	/**
+	 * Constructor that allows you to avoid calling the setter for name,
+	 * description and price 
+	 */
 	public Item(String name, String description, Float cost) {
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 	}
 
+	/*
+	 * Getters and setters
+	 */
 	public Long getId() {
 		return id;
 	}

@@ -1,9 +1,13 @@
 package com.lhlic.vendingMachine.change;
 
 public enum Unit {
+	// Units of change given by spec
 	TWENTY, TEN, FIVE, ONE, QUARTER, DIME, NICKEL, PENNY;
+	
+	// The value of a unit in cents
 	private int cents;
 
+	// Setting cent values
 	static {
 		TWENTY.cents = 100 * 20;
 		TEN.cents = 100 * 10;
@@ -15,11 +19,10 @@ public enum Unit {
 		PENNY.cents = 1;
 	}	
 
+	/**
+	 *  Getter for the units value in cents
+	 */
 	public int asCents() {
 		return cents;
-	}
-	
-	public float asDollars() {
-		return (float) (cents / 100.0);
 	}
 }

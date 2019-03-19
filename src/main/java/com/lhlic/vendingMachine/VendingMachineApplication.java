@@ -15,6 +15,7 @@ import com.lhlic.vendingMachine.item.ItemRepository;
 
 @SpringBootApplication
 public class VendingMachineApplication {
+	// Command line logger
 	private static final Logger log = LoggerFactory.getLogger(VendingMachineApplication.class);
 
 	public static void main(String[] args) {
