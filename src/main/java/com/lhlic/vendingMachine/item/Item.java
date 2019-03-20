@@ -1,5 +1,6 @@
 package com.lhlic.vendingMachine.item;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,13 +13,18 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name="item")
 public class Item {
+	/*
+	 * Items with null ids and duplicate ids will have a valid id
+	 * assigned to them 
+	 */
 	@Id
 	@NotNull
+	@Column(unique = true)
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 	
 	@NotNull
-	@Size(min = 1)
+	@Size(min = 1, message = "Item must have a name")
 	private String name;
 	
 	@NotNull
@@ -26,11 +32,11 @@ public class Item {
 	private String description;
 	
 	@NotNull
-	@Min(value = 0, message = "Cost should be positive")
+	@Min(value = 0, message = "Cost should be non negative")
 	private Float cost;
 	
 	@NotNull
-	@Min(value = 0, message = "Quantity should be positive")
+	@Min(value = 0, message = "Quantity should be non negative")
 	private Integer quantity;
 	
 	// Default constructor

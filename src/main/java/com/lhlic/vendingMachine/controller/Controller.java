@@ -73,10 +73,6 @@ public class Controller {
 		if(hit.getCost() > request.getPayment()) {
 			return new VendResponse(false, "Insufficient funds");
 		}
-		for(Unit unit: ChangeMaker.makeChange(request.getPayment()).keySet()) {
-			
-		}
-		
 		
 		// Dispense one of the item
 		VendResponse response = new VendResponse(true, "Enjoy your " + hit.getName());
