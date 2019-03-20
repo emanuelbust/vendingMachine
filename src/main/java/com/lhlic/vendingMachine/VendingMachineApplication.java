@@ -7,9 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.lhlic.vendingMachine.count.Count;
-import com.lhlic.vendingMachine.count.CountKey;
-import com.lhlic.vendingMachine.count.CountRepository;
 import com.lhlic.vendingMachine.item.Item;
 import com.lhlic.vendingMachine.item.ItemRepository;
 
@@ -23,17 +20,16 @@ public class VendingMachineApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner demo(ItemRepository itemRepo, CountRepository countRepo) {
+	public CommandLineRunner demo(ItemRepository itemRepo) {
 		return (ags) -> {
 			log.info("\tStarting logging...");
 			
-			itemRepo.save(new Item("Banana", "Yellow", 1.00f));
+			itemRepo.save(new Item("Banana", "The funniest fruit", 1.00f, 8));
+			itemRepo.save(new Item("Hot Cheetos", "The best", 1.00f, 4));
+			itemRepo.save(new Item("Arizona Iced Tea", "Have to get this with Hot Cheetos", 1.00f, 3));
+			itemRepo.save(new Item("Gum", "Stay fresh with mint gum", 1.00f, 12));
+			itemRepo.save(new Item("Danish", "This danish is pure protein", 1.00f, 1));
 			log.info("Number of items: " + itemRepo.count());
-			
-			
-			countRepo.save(new Count(new CountKey(new Long(1), new Long(1))));
-			log.info("Number of counts: " + countRepo.count());
-			
 		};
 	}
 

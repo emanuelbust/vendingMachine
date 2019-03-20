@@ -5,7 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="item")
@@ -16,13 +18,20 @@ public class Item {
     private Long id;
 	
 	@NotNull
+	@Size(min = 1)
 	private String name;
 	
 	@NotNull
+	@Size(min = 1)
 	private String description;
 	
 	@NotNull
+	@Min(value = 0, message = "Cost should be positive")
 	private Float cost;
+	
+	@NotNull
+	@Min(value = 0, message = "Quantity should be positive")
+	private Integer quantity;
 	
 	// Default constructor
 	public Item() {}
@@ -31,10 +40,11 @@ public class Item {
 	 * Constructor that allows you to avoid calling the setter for name,
 	 * description and price 
 	 */
-	public Item(String name, String description, Float cost) {
+	public Item(String name, String description, Float cost, Integer quantity) {
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
+		this.quantity = quantity;
 	}
 
 	/*
@@ -70,5 +80,13 @@ public class Item {
 
 	public void setCost(Float cost) {
 		this.cost = cost;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 }
