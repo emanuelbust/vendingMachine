@@ -3,6 +3,8 @@ package com.lhlic.vendingMachine.change;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lhlic.vendingMachine.exceptions.InsufficientFundsException;
+
 public class ChangeMaker {
 	
 	/**
@@ -17,12 +19,10 @@ public class ChangeMaker {
 	 * @return A map units map to how many of themselves are necessary to
 	 * 		   make change. Note: if a unit is not used, it will not be
 	 * 		   included in the keyset of the map
-	 * @throws NegativePaymentException Thrown if the user asks for change
-	 * 		   to be made for a negative amount
 	 */
-	public static Map<Unit, Integer> makeChange(float change) throws NegativePaymentException {
+	public static Map<Unit, Integer> makeChange(float change) {
 		if(change < 0) {
-			throw new NegativePaymentException("Negative change value: " + change);
+			return null;
 		}
 		
 		// Convert the payment to cents

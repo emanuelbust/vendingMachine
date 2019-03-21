@@ -3,10 +3,8 @@ package com.lhlic.vendingMachine.change;
 import static org.junit.Assert.*;
 
 import java.util.Map;
-import java.util.Random;
 
 import org.junit.Test;
-
 
 public class ChangeMakerTest {
 	private Map<Unit, Integer> change = null;
@@ -15,11 +13,7 @@ public class ChangeMakerTest {
 	// No change
 	public void noChange() {
 		float payment = 0f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		
 		assertNotEquals(null, change);
 		assertEquals(0, change.size());
@@ -30,11 +24,7 @@ public class ChangeMakerTest {
 	public void bill() {
 		// Twenties
 		float payment = 40f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		assertNotEquals(null, change);
 		assertEquals(1, change.size());
 		assertEquals(2, change.get(Unit.TWENTY).intValue());
@@ -45,11 +35,7 @@ public class ChangeMakerTest {
 	public void mixedBills() {
 		// Twenties
 		float payment = 18f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		assertNotEquals(null, change);
 		assertEquals(3, change.size());
 		assertEquals(1, change.get(Unit.TEN).intValue());
@@ -61,11 +47,7 @@ public class ChangeMakerTest {
 	// One unit of coins
 	public void coin() {
 		float payment = .04f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		assertNotEquals(null, change);
 		assertEquals(1, change.size());
 		assertEquals(4, change.get(Unit.PENNY).intValue());
@@ -75,11 +57,7 @@ public class ChangeMakerTest {
 	// Multiple units of coins
 	public void mixedCoins() {
 		float payment = .37f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		assertNotEquals(null, change);
 		assertEquals(3, change.size());
 		assertEquals(1, change.get(Unit.QUARTER).intValue());
@@ -92,11 +70,7 @@ public class ChangeMakerTest {
 	// Multiple coins and bills
 	public void billsAndCoins() {
 		float payment = 36.42f;
-		try {
-			change = ChangeMaker.makeChange(payment);
-		} catch (NegativePaymentException e) {
-			fail();
-		}
+		change = ChangeMaker.makeChange(payment);
 		assertNotEquals(null, change);
 		assertEquals(8, change.size());
 		assertEquals(1, change.get(Unit.TWENTY).intValue());
@@ -115,13 +89,7 @@ public class ChangeMakerTest {
 	@Test
 	// Expect an exception for negative payment
 	public void negative() {
-		boolean exceptionThrown = false;
-		try {
-			ChangeMaker.makeChange(-1);
-		} catch (NegativePaymentException e) {
-			exceptionThrown = true;
-		}
-		
-		assertEquals(true, exceptionThrown);
+		Map<Unit, Integer> change = ChangeMaker.makeChange(-1);
+		assertEquals(null, change);
 	}
 }
