@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Vending Machine</title>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+
+<body onload="buildDisplay()">
+	<div class="container">
+		<table class="messageDisplay">
+			<tr>
+				<th> Message </th>
+				<th> Credit </th>
+			</tr>
+			<tr>
+				<td> <div id="message"> Welcome to the Vending Machine </div> </td>
+				<td> <div id="payment"> $0.00 </div> </td>
+			</tr>
+		</table>
+		
+		<table>			
+			<thead>
+				<tr>
+					<th> Name </th>
+					<th> Description </th>
+					<th> Price </th>
+					<th> Remaining </th>
+					<th>  </th>
+				</tr>
+			</thead>
+			
+			<tbody id="itemDisplay">
+				
+			</tbody>
+		</table>
+	
+		<table class="paymentConsole">
+			<tr>
+				<td> <button onclick="depositMoney(20)"> Twenty </button> </td>
+				<td> <button onclick="depositMoney(10)"> Ten </button> </td>
+				<td> <button onclick="depositMoney(5)"> Five </button> </td>
+				<td> <button onclick="depositMoney(1)"> One </button> </td>
+				<td> <button onclick="depositMoney(.25)"> Quarter </button> </td>
+				<td> <button onclick="depositMoney(.10)"> Dime </button> </td>
+				<td> <button onclick="depositMoney(.05)"> Nickel </button> </td>
+				<td> <button onclick="depositMoney(.01)"> Penny </button> </td>
+			</tr>
+		</table>	  
+	</div>
+	
+	<script>
+		var serverUrl = "http://localhost:8080";
+		var moneyGiven = 0;
+		var moneyDisplay = document.getElementById("payment");
+		var itemDisplay = document.getElementById("itemDisplay");
+		
+		function buildDisplay(){
+			console.log("Building display...");
+			itemDisplay.innerHTML = "";
+			$.ajax({
+				type: "GET",
+				url: serverUrl + "/item",
+				success: function(response){
+					for(i = 0; i < response.length; i++){
+						var row = "<tr>";
+						row += "<td>" + response[i].name + "</td>";
+						row += "<td>" + response[i].description + "</td>";
+						row += "<td> $" + response[i].cost.toFixed(2) + "</td>";
+						row += "<td> " + response[i].quantity + "</td>";
+						row += "<td> <button onclick=\"purchaseItem(" + response[i].id + ")\"> BUY </button> </td>";
+						row += "</tr>";
+						
+						itemDisplay.innerHTML += row;
+					}	
+				},
+				
+				error: function(error){
+					console.log(error);
+				}
+			});
+		}	
+		
+		function depositMoney(amount){
+			moneyGiven += amount;
+			moneyDisplay.innerHTML  = "$" + moneyGiven.toFixed(2);
+		}
+		
+		function purchaseItem(id){
+			$.ajax({
+				type: "POST",
+				url: serverUrl + "/item/" + id,
+				contentType: "application/json",
+				dataType: "json",
+				data: JSON.stringify({payment: moneyGiven}),
+				
+				success: function(response){
+					console.log(response);
+				
+					// Succesful vend
+					if(response.success){
+						moneyGiven = 0;
+						depositMoney(0);
+						console.log(response.change);
+					// Unsuccessful vend
+					} else {
+						
+					}
+				},
+				
+				error: function(error){
+					console.log(error);
+				}
+			});
+			
+			buildDisplay();
+		}
+	</script>
+
+</body>
+</html>

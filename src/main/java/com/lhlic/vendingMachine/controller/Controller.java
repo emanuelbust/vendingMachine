@@ -1,6 +1,9 @@
 package com.lhlic.vendingMachine.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +19,20 @@ import com.lhlic.vendingMachine.item.Item;
 
 @RestController
 @RequestMapping("item")
+@CrossOrigin
 public class Controller {
 	@Autowired
 	private VendingService vendingService;
+	
+	/**
+	 * Gets a list of all of the items in the vending machine
+	 * 
+	 * @return A list of all the items in the vending machine
+	 */
+	@GetMapping
+	public List<Item> getAllItems(){
+		return vendingService.getAllItems();
+	}
 	
 	/**
 	 * Gets all of the information of an item with a given id

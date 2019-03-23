@@ -18,11 +18,11 @@ public class VendingService {
 	
 	static {
 		items = new ArrayList<Item>();
-		items.add(new Item(1L, "Banana", "The funniest fruit", 1.00f, 8));
-		items.add(new Item(2L, "Hot Cheetos", "The best", 1.00f, 4));
+		items.add(new Item(1L, "Banana", "The funniest fruit", .85f, 8));
+		items.add(new Item(2L, "Hot Cheetos", "The best", 1.50f, 4));
 		items.add(new Item(3L, "Arizona Iced Tea", "Have to get this with Hot Cheetos", 1.00f, 3));
-		items.add(new Item(4L, "Gum", "Stay fresh with mint gum", 1.00f, 0));
-		items.add(new Item(5L, "Danish", "This danish is pure protein", 1.00f, 1));
+		items.add(new Item(4L, "Gum", "Stay fresh with mint gum", .50f, 0));
+		items.add(new Item(5L, "Danish", "This danish is pure protein", 1.25f, 1));
 	}
 	
 	/**
