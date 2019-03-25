@@ -2,14 +2,24 @@ package com.lhlic.vendingMachine.controller;
 
 import java.util.Map;
 
-import com.lhlic.vendingMachine.change.Unit;
-
+/**
+ * This class exists to standardize the response from the server for a post
+ * request to vend an item
+ */
 public class VendResponse {
+	// Whether or not the vend was successful
 	private Boolean success;
+	// The message for the machine to display to the user
 	private String message;
+	// The quantity of the item left after the successful vend
 	private Integer remaining;
+	// The change to be given back to the user
 	private Map<Unit, Integer> change;
 	
+	
+	/*
+	 * Constructors
+	 */
 	public VendResponse() {}
 	
 	public VendResponse(Boolean success, String message, Integer remaining, Map<Unit, Integer> change) {
@@ -19,6 +29,10 @@ public class VendResponse {
 		this.change = change;
 	}
 
+	/*
+	 * Getters and setters 
+	 */
+	
 	public Boolean isSuccess() {
 		return success;
 	}

@@ -1,5 +1,6 @@
 package com.lhlic.vendingMachine.item;
 
+import java.text.NumberFormat;
 
 public class Item {
     private Long id;
@@ -25,6 +26,11 @@ public class Item {
 		this.description = description;
 		this.cost = cost;
 		this.quantity = quantity;
+	}
+	
+	public String getFormattedCost() {
+		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		return formatter.format(cost);
 	}
 
 	/*

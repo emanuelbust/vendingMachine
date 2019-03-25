@@ -4,37 +4,47 @@
 <head>
   <title>Vending Machine</title>
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" href="vendingMachine.css">
 </head>
 
 <body onload="buildDisplay()">
 	<div class="container">
-		<table class="messageDisplay">
-			<tr>
-				<th> Message </th>
-				<th> Credit </th>
-			</tr>
-			<tr>
-				<td> <div id="message"> Welcome to the Vending Machine </div> </td>
-				<td> <div id="payment"> $0.00 </div> </td>
-			</tr>
-		</table>
 		
-		<table>			
-			<thead>
-				<tr>
-					<th> Name </th>
-					<th> Description </th>
-					<th> Price </th>
-					<th> Remaining </th>
-					<th>  </th>
-				</tr>
-			</thead>
+		<!-- Vending machine -->
+		<div class="machine">
 			
-			<tbody id="itemDisplay">
+			<!-- Item display -->
+			<table>			
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Description </th>
+						<th> Price </th>
+						<th> Remaining </th>
+						<th>  </th>
+					</tr>
+				</thead>
 				
-			</tbody>
-		</table>
+				<tbody id="itemDisplay">
+					
+				</tbody>
+			</table>
+			
+			<!-- Credit and message -->
+			<table class="display">
+				<tr>
+					<th>  </th>
+					<th> Credit </th>
+				</tr>
+				<tr>
+					<td> <div id="message"> Welcome to the Vending Machine </div> </td>
+					<td> <div id="payment"> $0.00 </div> </td>
+				</tr>
+			</table>
+		</div>
+		<br>
 	
+		<h4> Click a button to insert money </h4>
 		<table class="paymentConsole">
 			<tr>
 				<td> <button onclick="depositMoney(20)"> Twenty </button> </td>
@@ -46,23 +56,78 @@
 				<td> <button onclick="depositMoney(.05)"> Nickel </button> </td>
 				<td> <button onclick="depositMoney(.01)"> Penny </button> </td>
 			</tr>
-		</table>	  
+		</table>
+		<br>	  
+	
+		<h4> Your change </h4>
+		<table class="paymentConsole">
+			<thead>
+				<tr>
+					<th> Twenties </th>
+					<th> Tens </th>
+					<th> Fives </th>
+					<th> Ones </th>
+					<th> Quarters </th>
+					<th> Dimes </th>
+					<th> Nickels </th>
+					<th> Pennies </th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr>
+					<td> <div id="twenties"> 0 </div> </td>
+					<td> <div id="tens"> 0 </div> </td>
+					<td> <div id="fives"> 0 </div> </td>
+					<td> <div id="ones"> 0 </div> </td>
+					<td> <div id="quarters"> 0 </div> </td>
+					<td> <div id="dimes"> 0 </div> </td>
+					<td> <div id="nickels"> 0 </div> </td>
+					<td> <div id="pennies"> 0 </div> </td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 	
 	<script>
+		// Base url for making http rests
 		var serverUrl = "http://localhost:8080";
-		var moneyGiven = 0;
+		var credit = 0;
+		
+		// References for updating divs
+		var msgDisplay = document.getElementById("message");
 		var moneyDisplay = document.getElementById("payment");
 		var itemDisplay = document.getElementById("itemDisplay");
 		
+		// Map from unit to display div for that unit
+		var change =	{	
+							"TWENTY": document.getElementById("twenties"),
+							"TEN": document.getElementById("tens"),
+							"FIVE": document.getElementById("fives"),
+							"ONE": document.getElementById("ones"),
+							"QUARTER": document.getElementById("quarters"),
+							"DIME": document.getElementById("dimes"),
+							"NICKEL": document.getElementById("nickels"),
+							"PENNY": document.getElementById("pennies")
+						};
+				
+		/*
+		 * This functions builds the display for items. It does so by simply
+		 * calling the server for the list of items in the machine and then
+		 * adds them as to a table.
+		 */
 		function buildDisplay(){
-			console.log("Building display...");
+			// Clear the display
 			itemDisplay.innerHTML = "";
+	
+			// Ask server for item list
 			$.ajax({
 				type: "GET",
 				url: serverUrl + "/item",
 				success: function(response){
+					// For each item
 					for(i = 0; i < response.length; i++){
+						// Build a row of the form: name description cost quantity
 						var row = "<tr>";
 						row += "<td>" + response[i].name + "</td>";
 						row += "<td>" + response[i].description + "</td>";
@@ -71,6 +136,7 @@
 						row += "<td> <button onclick=\"purchaseItem(" + response[i].id + ")\"> BUY </button> </td>";
 						row += "</tr>";
 						
+						// Add the row to the table
 						itemDisplay.innerHTML += row;
 					}	
 				},
@@ -81,39 +147,53 @@
 			});
 		}	
 		
+		/*
+		 * This function is used by the deposit buttons to add money to the
+		 * users credit and display the updated amount
+		 */
 		function depositMoney(amount){
-			moneyGiven += amount;
-			moneyDisplay.innerHTML  = "$" + moneyGiven.toFixed(2);
+			credit += amount;
+			moneyDisplay.innerHTML  = "$" + credit.toFixed(2);
 		}
 		
+		/*
+		 */
 		function purchaseItem(id){
+			// Ask the server to vend an item
 			$.ajax({
 				type: "POST",
 				url: serverUrl + "/item/" + id,
 				contentType: "application/json",
 				dataType: "json",
-				data: JSON.stringify({payment: moneyGiven}),
+				data: JSON.stringify({payment: credit}),
 				
 				success: function(response){
-					console.log(response);
-				
+					// Clear the change display
+					for(unit in change){
+						change[unit].innerHTML = "0";
+					}
+					
 					// Succesful vend
 					if(response.success){
-						moneyGiven = 0;
+						// Reset credit to zero and update the display
+						credit = 0;
 						depositMoney(0);
-						console.log(response.change);
-					// Unsuccessful vend
-					} else {
 						
+						// Update the change displays
+						for(unit in response.change){
+							change[unit].innerHTML = response.change[unit];								
+						}	
 					}
+					
+					// Update the message display
+					msgDisplay.innerHTML = response.message;
+					buildDisplay();
 				},
 				
 				error: function(error){
 					console.log(error);
 				}
 			});
-			
-			buildDisplay();
 		}
 	</script>
 

@@ -2,6 +2,8 @@ package com.lhlic.vendingMachine.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +13,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.lhlic.vendingMachine.VendingMachineApplication;
 import com.lhlic.vendingMachine.exceptions.InsufficientFundsException;
 import com.lhlic.vendingMachine.exceptions.ItemNotFoundException;
 import com.lhlic.vendingMachine.exceptions.OutOfStockException;
 import com.lhlic.vendingMachine.item.Item;
 
 
+/**
+ * This class manages all of the http request from the front end. The
+ * controller is able to get single items, all items, and vend and item. 
+ */
 @RestController
 @RequestMapping("item")
 @CrossOrigin
 public class Controller {
+	// Json builder
+	private static final Gson gson = new Gson();
+	
+	// Command line logger
+	private static final Logger log = LoggerFactory.getLogger(VendingMachineApplication.class);
+	
 	@Autowired
+	// Business logic for vending machine
 	private VendingService vendingService;
 	
 	/**
@@ -31,6 +46,7 @@ public class Controller {
 	 */
 	@GetMapping
 	public List<Item> getAllItems(){
+		log.info("Controller request for all items");
 		return vendingService.getAllItems();
 	}
 	
@@ -42,6 +58,7 @@ public class Controller {
 	 */
 	@GetMapping("/{id}")
 	public Item getItem(@PathVariable long id) {
+		log.info("Controller request for item: " + id);
 		return vendingService.getItem(id);
 	}
 	
@@ -63,6 +80,10 @@ public class Controller {
 			response.setSuccess(false);
 			response.setMessage(e.getMessage());
 		}
+		
+		// Log
+		log.info("Request to vend: " + gson.toJson(request));
+		log.info("Response to vend: " + gson.toJson(response));
 		
 		// Respond to the front end
 		return response;

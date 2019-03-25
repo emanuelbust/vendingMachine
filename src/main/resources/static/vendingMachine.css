@@ -1,0 +1,22 @@
+@charset "ISO-8859-1";
+table{
+	text-align: center;
+}
+
+th,td{
+	padding: 5px;
+}
+
+.machine{
+	border-radius: 3px;
+	padding: 10px;
+	background-color: tan;
+	width:  40vw;
+}
+
+.display{
+	padding: 10px;
+	background-color: tan;
+	margin-left: 2vw;
+	width:  30vw;
+}
