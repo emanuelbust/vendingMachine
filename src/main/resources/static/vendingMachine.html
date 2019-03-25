@@ -21,18 +21,20 @@
 						<th> Description </th>
 						<th> Price </th>
 						<th> Remaining </th>
+						<!-- Blank header for vend buttons -->
 						<th>  </th>
 					</tr>
 				</thead>
 				
+				<!-- This will be built by js functions -->
 				<tbody id="itemDisplay">
-					
 				</tbody>
 			</table>
 			
 			<!-- Credit and message -->
 			<table class="display">
 				<tr>
+					<!-- Blank header for vending machine messages -->
 					<th>  </th>
 					<th> Credit </th>
 				</tr>
@@ -47,6 +49,7 @@
 		<h4> Click a button to insert money </h4>
 		<table class="paymentConsole">
 			<tr>
+				<!-- Each button keeps track of how much money it'll deposit when clicked -->
 				<td> <button onclick="depositMoney(20)"> Twenty </button> </td>
 				<td> <button onclick="depositMoney(10)"> Ten </button> </td>
 				<td> <button onclick="depositMoney(5)"> Five </button> </td>
@@ -92,6 +95,8 @@
 	<script>
 		// Base url for making http rests
 		var serverUrl = "http://localhost:8080";
+		
+		// Money the user can use to buy items
 		var credit = 0;
 		
 		// References for updating divs
